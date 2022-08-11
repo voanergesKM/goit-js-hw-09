@@ -5,7 +5,7 @@ const refs = {
 };
 
 let randomHexColor = null;
-let intervalid = null;
+let intervalId = null;
 
 refs.startBtn.addEventListener('click', onStartBtnClick);
 refs.stopBtn.addEventListener('click', onStopBtnClick);
@@ -16,14 +16,14 @@ function onStartBtnClick() {
   refs.stopBtn.removeAttribute('disabled');
   refs.startBtn.setAttribute('disabled', '');
 
-  intervalid = setInterval(() => changeBodyBgColor(), 1000);
+  intervalId = setInterval(() => changeBodyBgColor(), 1000);
 }
 
 function onStopBtnClick() {
   refs.startBtn.removeAttribute('disabled');
   refs.stopBtn.setAttribute('disabled', '');
 
-  clearInterval(intervalid);
+  clearInterval(intervalId);
 }
 
 function getRandomHexColor() {
