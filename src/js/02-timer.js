@@ -14,6 +14,7 @@ const refs = {
 let currentDate = Date.now();
 let dateInFuture = null;
 let intervalId = null;
+let delta = null;
 
 refs.startBtn.setAttribute('disabled', '');
 
@@ -47,17 +48,11 @@ const options = {
 flatpickr('#datetime-picker', options);
 
 function onStartBtnClick() {
-  let delta = null;
   intervalId = setInterval(() => {
     delta = dateInFuture - new Date();
     makeMarkUpTimer(convertMs(delta));
-    if (delta <= 0) {
+    if (Number(delta) <= 1000) {
       clearInterval(intervalId);
-
-      //   refs.daysEl.textContent = '00';
-      //   refs.hoursEl.textContent = '00';
-      //   refs.minutesEl.textContent = '00';
-      //   refs.secondsEl.textContent = '00';
     }
   }, 1000);
 }
