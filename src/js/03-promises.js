@@ -5,10 +5,6 @@ const formEl = document.querySelector('.form');
 formEl.addEventListener('submit', onSubmitBtnClick);
 formEl.addEventListener('input', onInputChange);
 
-let timerId = null;
-let intervalId = null;
-let totalAmount = null;
-let passedTime = null;
 let data = {};
 
 function onInputChange(e) {
@@ -18,44 +14,34 @@ function onInputChange(e) {
 function onSubmitBtnClick(e) {
   e.preventDefault();
 
-  let dataStart = Date.now();
-
-  timerId = setTimeout(() => {
-    totalAmount += 1;
-    passedTime = Date.now() - dataStart;
-    createPromise();
-    clearTimeout(timerId);
-
-    intervalId = setInterval(() => {
-      totalAmount += 1;
-      if (totalAmount >= data.amount) {
-        clearInterval(intervalId);
-      }
-
-      passedTime = Date.now() - dataStart;
-
-      createPromise();
-    }, data.step);
-  }, data.delay);
+  promiseLoop();
 
   e.currentTarget.reset();
 }
 
-function createPromise(position, delay) {
-  console.log('createPromise : delay', delay);
-  console.log(data);
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    notiFySucces();
-  } else {
-    notiFyFailure();
+function promiseLoop() {
+  for (let i = 1; i <= data.amount; i += 1) {
+    let delay = (data.delay += data.step) - data.step;
+
+    setTimeout(() => {
+      createPromise(i, delay);
+    }, delay);
   }
 }
 
-function notiFySucces() {
-  Notify.success(`Fullfilled promise ${totalAmount} in ${passedTime} ms`);
+function createPromise(position, delay) {
+  const shouldResolve = Math.random() > 0.3;
+  if (shouldResolve) {
+    notiFySucces(position, delay);
+  } else {
+    notiFyFailure(position, delay);
+  }
 }
 
-function notiFyFailure() {
-  Notify.failure(`Rejected promise ${totalAmount} in ${passedTime} ms`);
+function notiFySucces(position, delay) {
+  Notify.success(`Fullfilled promise ${position} in ${delay} ms`);
+}
+
+function notiFyFailure(position, delay) {
+  Notify.failure(`Rejected promise ${position} in ${delay} ms`);
 }
